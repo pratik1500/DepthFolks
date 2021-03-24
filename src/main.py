@@ -13,7 +13,7 @@ from torchvision import transforms as T
 pd.options.mode.chained_assignment = None
 
 df = pd.read_csv(r'dataset\train.csv')
-pritn(df.head())
+print(df.head())
 
 
 def get_APN(data):
@@ -22,7 +22,7 @@ def get_APN(data):
     data['Negative'] = np.zeros(len(data))
     data = data.rename(columns = {'labels_group' : 'label_group','image' : 'Anchor'})
     
-    for i in tqdm(range(len(data))):
+    for i in range(len(data)):
         
         lg = data['label_group'].iloc[i]
         A_choice = data['Anchor'].iloc[i]
@@ -135,7 +135,7 @@ custom_transform = T.Compose([
     ToTensor()
 ])
 
-siamese_data = APN_Dataset(df_siamese,'../input/shopee-product-matching/train_images',transform = custom_transform)
+siamese_data = APN_Dataset(df_siamese,'dataset/train_images',transform = custom_transform)
 
 idx = 3245
 A,P,N = siamese_data[idx]
