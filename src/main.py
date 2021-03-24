@@ -137,3 +137,48 @@ custom_transform = T.Compose([
 
 siamese_data = APN_Dataset(df_siamese,'../input/shopee-product-matching/train_images',transform = custom_transform)
 
+idx = 3245
+A,P,N = siamese_data[idx]
+
+f, (ax1, ax2, ax3) = plt.subplots(1,3,figsize= (10,5))
+
+ax1.set_title('Anchor')
+ax1.imshow(A.numpy().transpose((1,2,0)), cmap = 'gray')
+
+ax2.set_title('Positive')
+ax2.imshow(P.numpy().transpose((1,2,0)), cmap = 'gray')
+
+ax3.set_title('Negative')
+ax3.imshow(N.numpy().transpose((1,2,0)), cmap = 'gray')
+
+
+idx = 9005
+A,P,N = siamese_data[idx]
+
+f, (ax1, ax2, ax3) = plt.subplots(1,3,figsize= (10,5))
+
+ax1.set_title('Anchor')
+ax1.imshow(A.numpy().transpose((1,2,0)), cmap = 'gray')
+
+ax2.set_title('Positive')
+ax2.imshow(P.numpy().transpose((1,2,0)), cmap = 'gray')
+
+ax3.set_title('Negative')
+
+ax3.imshow(N.numpy().transpose((1,2,0)), cmap = 'gray')
+
+idx = 23380
+A,P,N = siamese_data[idx]
+
+f, (ax1, ax2, ax3) = plt.subplots(1,3,figsize= (10,5))
+
+ax1.set_title('Anchor')
+ax1.imshow(A.numpy().transpose((1,2,0)), cmap = 'gray')
+
+ax2.set_title('Positive')
+ax2.imshow(P.numpy().transpose((1,2,0)), cmap = 'gray')
+
+ax3.set_title('Negative')
+ax3.imshow(N.numpy().transpose((1,2,0)), cmap = 'gray')
+
+df_siamese.to_csv('APN_data.csv',index = False)
