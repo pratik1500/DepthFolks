@@ -65,3 +65,75 @@ def get_APN(data):
                     n_flag = False 
                     
     return data
+
+df_siamese = get_APN(df)
+
+df_siamese = df_siamese.drop(['label_group','posting_id','image_phash','title'],axis = 1)
+
+class APN_Dataset(Dataset):
+    
+    def __init__(self,df,root_dir,transform = None):
+        
+        self.APN_names = df
+        self.root_dir = root_dir
+        self.transform = transform
+        
+    def __len__(self):
+        return len(self.ANP_names)
+    
+    def __getitem__(self,idx):
+        
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+            
+        A_name = os.path.join(self.root_dir,self.APN_names.iloc[idx,0])
+        P_name = os.path.join(self.root_dir,self.APN_names.iloc[idx,1])
+        N_name = os.path.join(self.root_dir,self.APN_names.iloc[idx,2])
+        
+        A = io.imread(A_name)
+        P = io.imread(P_name)
+        N = io.imread(N_name)
+         
+        
+        if self.transform:
+            sample = self.transform((A,P,N))
+            A,P,N = sample
+            
+        return A,P,N
+
+
+class ToTensor(object):
+    
+    def __call__(self,sample):
+        
+        A,P,N = sample
+        
+        A = A.transpose((2,0,1))
+        P = P.transpose((2,0,1))
+        N = N.transpose((2,0,1))
+        
+        return torch.from_numpy(A),torch.from_numpy(P),torch.from_numpy(N)
+
+class Resize(object):
+    
+    def __init__(self,*img_size):
+        self.img_size = img_size
+    
+    def __call__(self,sample):
+        
+        A,P,N = sample
+        
+        A = transform.resize(A,self.img_size)
+        P = transform.resize(P,self.img_size)
+        N = transform.resize(N,self.img_size)
+        
+        return A,P,N
+    
+
+custom_transform = T.Compose([
+    Resize(512,512),
+    ToTensor()
+])
+
+siamese_data = APN_Dataset(df_siamese,'../input/shopee-product-matching/train_images',transform = custom_transform)
+
